@@ -1,8 +1,9 @@
+import html
 import os
 import re
-import html
+from typing import Any, Dict, List, Optional
+
 import requests
-from typing import Dict, Any, List, Optional
 
 
 class MindSightClient:

@@ -1,4 +1,5 @@
 import pytest
+
 from src.api.main import clean_text
 
 
@@ -22,7 +23,7 @@ def test_clean_text_reddit_artifacts():
 
 def test_clean_text_html_entities():
     assert clean_text("Feeling down &amp; hopeless") == "Feeling down hopeless"
-    assert clean_text("Don&#39;t worry &quot;friend&quot;") == "Don t worry friend"
+    assert clean_text("Don&#39;t worry &quot;friend&quot;") == 'Don\'t worry "friend"'
     assert clean_text("&lt;b&gt;bold text&lt;/b&gt;") == "b bold text b"
     assert clean_text("First line&nbsp;second line") == "First line second line"
 

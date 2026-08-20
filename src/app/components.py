@@ -1,12 +1,19 @@
-import streamlit as st
-import pandas as pd
+from typing import Any, Dict, List
+
 import numpy as np
-import plotly.graph_objects as go
+import pandas as pd
 import plotly.express as px
-from typing import List, Dict, Any
+import plotly.graph_objects as go
+
+try:
+    import streamlit as st
+except ImportError:
+    st = None
 
 
 def load_custom_css():
+    if st is None:
+        return
     st.markdown(
         """
         <style>
@@ -188,6 +195,8 @@ def load_custom_css():
 
 
 def render_header():
+    if st is None:
+        return
     st.markdown(
         """
         <div class="main-header">
@@ -241,6 +250,8 @@ def render_gauge_chart(confidence: float, threshold: float):
 
 
 def render_explanation_chips(explanations: List[Dict[str, Any]]):
+    if st is None:
+        return
     if not explanations:
         st.markdown('<div style="font-size: 0.85rem; color: #78716C;">No significant token attributions identified.</div>', unsafe_allow_html=True)
         return
@@ -306,6 +317,8 @@ def get_preset_samples() -> Dict[str, str]:
 
 
 def render_crisis_resources():
+    if st is None:
+        return
     st.markdown(
         """
         <div class="crisis-box">

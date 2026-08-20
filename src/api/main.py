@@ -1,11 +1,11 @@
+import html
 import os
 import re
-import html
-from typing import List, Dict, Any, Optional
+from typing import Any, Dict, List, Optional
+
 from fastapi import FastAPI, HTTPException, status
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel, Field
-import joblib
 
 app = FastAPI(
     title="MindSight Conversational Screening API",
@@ -149,6 +149,7 @@ def predict_distress(req: TextPredictionRequest):
 
     if os.path.exists(lr_path) and os.path.exists(vec_path):
         try:
+            import joblib
             model = joblib.load(lr_path)
             vectorizer = joblib.load(vec_path)
             x_vec = vectorizer.transform([cleaned])

@@ -1,11 +1,12 @@
 import pytest
+
 from src.app.client import MindSightClient
 from src.app.components import (
     get_preset_samples,
-    render_gauge_chart,
-    render_feature_bar_chart,
+    render_crisis_resources,
     render_explanation_chips,
-    render_crisis_resources
+    render_feature_bar_chart,
+    render_gauge_chart,
 )
 
 

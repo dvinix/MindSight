@@ -1,6 +1,8 @@
-import pytest
 from concurrent.futures import ThreadPoolExecutor
-from src.api.main import compute_linguistic_signals, clean_text
+
+import pytest
+
+from src.api.main import clean_text, compute_linguistic_signals
 from src.app.client import MindSightClient
 
 

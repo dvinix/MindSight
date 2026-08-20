@@ -1,18 +1,31 @@
-import streamlit as st
-import pandas as pd
 import numpy as np
-import plotly.graph_objects as go
+import pandas as pd
 import plotly.express as px
-from client import MindSightClient
-from components import (
-    load_custom_css,
-    render_header,
-    render_gauge_chart,
-    render_explanation_chips,
-    render_feature_bar_chart,
-    get_preset_samples,
-    render_crisis_resources
-)
+import plotly.graph_objects as go
+import streamlit as st
+
+try:
+    from src.app.client import MindSightClient
+    from src.app.components import (
+        get_preset_samples,
+        load_custom_css,
+        render_crisis_resources,
+        render_explanation_chips,
+        render_feature_bar_chart,
+        render_gauge_chart,
+        render_header,
+    )
+except ImportError:
+    from client import MindSightClient
+    from components import (
+        get_preset_samples,
+        load_custom_css,
+        render_crisis_resources,
+        render_explanation_chips,
+        render_feature_bar_chart,
+        render_gauge_chart,
+        render_header,
+    )
 
 st.set_page_config(
     page_title="MindSight | Mental Health Screening Aid",
