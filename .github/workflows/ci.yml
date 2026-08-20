@@ -1,0 +1,144 @@
+name: CI Pipeline
+
+on:
+  push:
+    branches:
+      - main
+      - akshat
+  pull_request:
+    branches:
+      - main
+      - akshat
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  lint-and-format:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.10'
+          cache: 'pip'
+
+      - name: Install Ruff
+        run: |
+          python -m pip install --upgrade pip
+          pip install ruff
+
+      - name: Run Ruff Lint Checks
+        run: |
+          ruff check . --output-format=github
+
+  security-audit:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.10'
+          cache: 'pip'
+
+      - name: Install Security Tools
+        run: |
+          python -m pip install --upgrade pip
+          pip install bandit
+
+      - name: Run Bandit Security Scan
+        run: |
+          bandit -r src -ll -x tests
+
+  test-matrix:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ['3.10', '3.11']
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+          cache: 'pip'
+
+      - name: Install Project Dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Run Pytest Suite with Coverage
+        env:
+          PYTHONPATH: .
+        run: |
+          pytest --cov=src --cov-report=xml --cov-report=term-missing tests/
+
+      - name: Upload Test Coverage
+        if: matrix.python-version == '3.10'
+        uses: actions/upload-artifact@v4
+        with:
+          name: coverage-report
+          path: coverage.xml
+          retention-days: 7
+
+  docker-build-and-smoke:
+    runs-on: ubuntu-latest
+    needs: [lint-and-format, security-audit, test-matrix]
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Validate Docker Compose Configuration
+        run: |
+          docker compose config
+
+      - name: Build and Start Multi-Container Stack
+        run: |
+          docker compose up -d --build
+
+      - name: API Container Health Smoke Test
+        run: |
+          for i in {1..30}; do
+            if curl -f http://localhost:8000/health; then
+              echo "API container healthy!"
+              break
+            fi
+            echo "Waiting for API service..."
+            sleep 2
+          done
+
+      - name: UI Container Health Smoke Test
+        run: |
+          for i in {1..30}; do
+            if curl -f http://localhost:8501/_stcore/health; then
+              echo "UI container healthy!"
+              break
+            fi
+            echo "Waiting for UI service..."
+            sleep 2
+          done
+
+      - name: API Inference Functional Smoke Test
+        run: |
+          curl -f -X POST http://localhost:8000/predict \
+            -H "Content-Type: application/json" \
+            -d '{"text": "I feel so anxious and stressed", "threshold": 0.45}'
+
+      - name: Tear Down Stack
+        if: always()
+        run: |
+          docker compose down -v

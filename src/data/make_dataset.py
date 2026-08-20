@@ -4,10 +4,10 @@ Module: Data Ingestion and Exploratory Data Analysis (EDA) Pipeline
 File: src/data/make_dataset.py
 """
 
-import os
-import re
 from collections import Counter
+import os
 from pathlib import Path
+import re
 
 import matplotlib.pyplot as plt
 import nltk

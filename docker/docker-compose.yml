@@ -1,0 +1,36 @@
+services:
+  api:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile.api
+    container_name: mindsight-api
+    ports:
+      - "8000:8000"
+    environment:
+      - MODEL_PATH=/app/models
+      - LOG_LEVEL=info
+    volumes:
+      - ../models:/app/models
+      - ../reports:/app/reports
+    restart: unless-stopped
+    networks:
+      - mindsight-network
+
+  ui:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile.ui
+    container_name: mindsight-ui
+    ports:
+      - "8501:8501"
+    depends_on:
+      - api
+    environment:
+      - API_URL=http://api:8000
+    restart: unless-stopped
+    networks:
+      - mindsight-network
+
+networks:
+  mindsight-network:
+    driver: bridge
