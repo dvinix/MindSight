@@ -1,0 +1,1 @@
+"""Streamlit analytical dashboard application."""
