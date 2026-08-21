@@ -1,0 +1,46 @@
+{
+  "model": "BiLSTM with Self-Attention (Tuned)",
+  "optimal_threshold": 0.36,
+  "accuracy": 0.7357,
+  "precision": 0.7123,
+  "recall": 0.8184,
+  "f1_score": 0.7617,
+  "roc_auc": 0.8137,
+  "confusion_matrix": [
+    [
+      224,
+      122
+    ],
+    [
+      67,
+      302
+    ]
+  ],
+  "classification_report": {
+    "0": {
+      "precision": 0.7697594501718213,
+      "recall": 0.6473988439306358,
+      "f1-score": 0.7032967032967034,
+      "support": 346.0
+    },
+    "1": {
+      "precision": 0.7122641509433962,
+      "recall": 0.8184281842818428,
+      "f1-score": 0.7616645649432535,
+      "support": 369.0
+    },
+    "accuracy": 0.7356643356643356,
+    "macro avg": {
+      "precision": 0.7410118005576087,
+      "recall": 0.7329135141062393,
+      "f1-score": 0.7324806341199784,
+      "support": 715.0
+    },
+    "weighted avg": {
+      "precision": 0.7400870509895991,
+      "recall": 0.7356643356643356,
+      "f1-score": 0.7334194179086992,
+      "support": 715.0
+    }
+  }
+}
