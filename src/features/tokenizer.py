@@ -12,8 +12,13 @@ from typing import Dict, List, Optional, Tuple, Union
 
 import numpy as np
 import pandas as pd
-import torch
-from torch.utils.data import DataLoader, Dataset
+try:
+    import torch
+    from torch.utils.data import DataLoader, Dataset
+except ImportError:  # pragma: no cover
+    torch = None
+    Dataset = object
+    DataLoader = None
 
 
 class TextTokenizer:

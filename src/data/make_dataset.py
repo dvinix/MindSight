@@ -9,12 +9,19 @@ import os
 from pathlib import Path
 import re
 
-import matplotlib.pyplot as plt
-import nltk
-from nltk.corpus import stopwords
-import numpy as np
-import pandas as pd
-import seaborn as sns
+try:
+    import matplotlib.pyplot as plt
+    import seaborn as sns
+except ImportError:  # pragma: no cover
+    plt = None
+    sns = None
+
+try:
+    import nltk
+    from nltk.corpus import stopwords
+except ImportError:  # pragma: no cover
+    nltk = None
+    stopwords = None
 
 
 def setup_directories(base_dir: Path):
