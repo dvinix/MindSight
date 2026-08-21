@@ -60,7 +60,7 @@ def load_transformer_pipeline(
 ) -> Tuple[AutoModelForSequenceClassification, AutoTokenizer]:
     """
     Load pretrained transformer model and tokenizer for binary mental health risk classification.
-    
+
     Compatible backbones:
     - 'distilbert-base-uncased' (Fast, lightweight, highly efficient)
     - 'mental/mental-bert-base-uncased' (Domain-specific mental health pretrained BERT)
