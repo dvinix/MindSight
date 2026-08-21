@@ -57,6 +57,7 @@ class TransformerMentalHealthDataset(Dataset):
 def load_transformer_pipeline(
     model_name_or_path: str = "distilbert-base-uncased",
     num_labels: int = 2,
+    revision: Optional[str] = None,
 ) -> Tuple[AutoModelForSequenceClassification, AutoTokenizer]:
     """
     Load pretrained transformer model and tokenizer for binary mental health risk classification.
@@ -66,10 +67,11 @@ def load_transformer_pipeline(
     - 'mental/mental-bert-base-uncased' (Domain-specific mental health pretrained BERT)
     - 'roberta-base' (Robust contextual language model)
     """
-    tokenizer = AutoTokenizer.from_pretrained(model_name_or_path)
-    model = AutoModelForSequenceClassification.from_pretrained(
+    tokenizer = AutoTokenizer.from_pretrained(model_name_or_path, revision=revision)  # nosec B615
+    model = AutoModelForSequenceClassification.from_pretrained(  # nosec B615
         model_name_or_path,
         num_labels=num_labels,
+        revision=revision,
     )
     return model, tokenizer
 
