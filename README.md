@@ -98,3 +98,7 @@ git commit -m "chore: initialize DVC and track data directories"
 3. **Modeling (`src/models`)**: Classical baselines (Logistic Regression, Random Forest, XGBoost) and deep transformer models (RoBERTa / MentalBERT / DistilBERT).
 4. **Explainability (`src/explainability`)**: SHAP value generation and LIME surrogate explanations for word/phrase-level feature attributions.
 5. **Inference & UI (`src/api` & `src/app`)**: FastAPI REST endpoints for real-time risk scoring alongside an intuitive Streamlit analytical dashboard.
+
+## Project Diagrams
+
+Process, flow-chart, DFD, and delivery schedule diagrams are available in [reports/project_diagrams.md](reports/project_diagrams.md).
