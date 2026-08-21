@@ -75,16 +75,26 @@ def load_transformer_pipeline(
 
 
 def create_transformer_dataloaders(
-    train_df: pd.DataFrame,
-    val_df: pd.DataFrame,
-    tokenizer: PreTrainedTokenizerBase,
+    train_df: Optional[pd.DataFrame] = None,
+    val_df: Optional[pd.DataFrame] = None,
+    tokenizer: Optional[PreTrainedTokenizerBase] = None,
     text_col: str = "text",
     label_col: str = "label",
     max_length: int = 160,
     batch_size: int = 16,
     num_workers: int = 0,
+    **kwargs,
 ) -> Tuple[DataLoader, DataLoader]:
     """Create batched DataLoaders for fine-tuning transformer models."""
+    # Allow both train_df / df_train and val_df / df_val
+    if train_df is None and "df_train" in kwargs:
+        train_df = kwargs["df_train"]
+    if val_df is None and "df_val" in kwargs:
+        val_df = kwargs["df_val"]
+
+    if train_df is None or val_df is None:
+        raise ValueError("Both train_df and val_df must be provided.")
+
     train_ds = TransformerMentalHealthDataset(
         texts=train_df[text_col].tolist(),
         labels=train_df[label_col].values,
