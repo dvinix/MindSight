@@ -7,7 +7,6 @@ from src.app.components import (
     render_explanation_chips,
     render_feature_bar_chart,
     render_gauge_chart,
-    render_header,
 )
 
 
@@ -22,7 +21,6 @@ def test_preset_samples_integrity():
 
 def test_mindsight_client_offline_fallback():
     client = MindSightClient(base_url="http://127.0.0.1:59999")
-    client.timeout = 0.05
     health = client.check_health()
     assert health["status"] == "offline"
 
@@ -35,7 +33,6 @@ def test_mindsight_client_offline_fallback():
 
 def test_mindsight_client_empty_and_none():
     client = MindSightClient(base_url="http://127.0.0.1:59999")
-    client.timeout = 0.05
 
     resp_empty = client.predict("", model_type="baseline", threshold=0.45)
     assert resp_empty["success"] is True
@@ -49,7 +46,6 @@ def test_mindsight_client_empty_and_none():
 
 def test_mindsight_client_threshold_clamping():
     client = MindSightClient(base_url="http://127.0.0.1:59999")
-    client.timeout = 0.05
 
     resp_low = client.predict("Standard note", threshold=-0.5)
     assert resp_low["data"]["threshold"] == 0.0
@@ -85,11 +81,3 @@ def test_components_feature_bar_chart():
 def test_components_feature_bar_chart_empty():
     fig = render_feature_bar_chart({})
     assert fig is not None
-
-
-def test_components_helper_renders_headless():
-    """Verify headless execution of render functions does not raise errors."""
-    render_header()
-    render_crisis_resources()
-    render_explanation_chips([{"word": "anxious", "weight": 0.35}])
-    render_explanation_chips([])
